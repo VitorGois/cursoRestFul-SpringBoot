@@ -1,61 +1,80 @@
 package com.example.cursorestfulspringboot.controllers;
 
-import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import javax.servlet.http.HttpServletRequest;
+import com.example.cursorestfulspringboot.dto.ClienteDTO;
+import com.example.cursorestfulspringboot.model.Cliente;
+import com.example.cursorestfulspringboot.service.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
+@RequestMapping("/clientes")
 public class ClienteController {
-    // Atributo
-    List<Cliente> clientes;  // vetor para armazenar os clientes em uma "list"
 
-    @PostConstruct  // Assim que o Spring contruir o objeto, executar o método init
-    public void init() {
-        Cliente c1 = new Cliente(); // Variável
-        c1.id = 1;
-        c1.nome = "José";
-        c1.endereco = "Rua X, 99";
-        c1.saldo = 202.0;
-        
-        Cliente c2 = new Cliente();
-        c2.id = 2;
-        c2.nome = "Maria";
-        c2.endereco = "Rua Y, 59";
-        c2.saldo = 444.0;
-        
-        Cliente c3 = new Cliente();
-        c3.id = 3;
-        c3.nome = "Fernanda";
-        c3.endereco = "Rua W, 33";
-        c3.saldo = 332.0;
+  
 
-        // Classe utilitária
-        clientes = Arrays.asList(c1,c2,c3);
-    }
+    @Autowired
+    private ClienteService servico;
 
-    @GetMapping("/clientes")
+    @GetMapping
     public List<Cliente> getClientes() {
-        return clientes;
+        return servico.getAllClientes();
     }
 
-    @GetMapping("/clientes/{id}")
-    public Cliente getClienteById(@PathVariable int id) {
-        Cliente cliente = null;
-
-        // Percorre o laço até que seja encontrado o compátivel, criando uma váriavel auxiliar(objeto)
-        for (Cliente aux : clientes) {
-            // Comparando todos os objetos clientes com a id passado
-            if (aux.id == id) { 
-                cliente = aux;
-                break;
-            }
-        }
-
-        return cliente;
+    @GetMapping("/{id}")
+    public ResponseEntity<Cliente> getClienteByCodigo(@PathVariable int id) {
+        Cliente cli = servico.getClienteById(id);
+        return ResponseEntity.ok(cli);	
     }
+
+    @PostMapping
+    public ResponseEntity<Void> salvar(@RequestBody ClienteDTO novoCliente, 
+                                       HttpServletRequest request,
+                                       UriComponentsBuilder builder
+                                       ) {
+      
+        Cliente cli = servico.salvar(servico.fromDTO(novoCliente));
+        UriComponents uriComponents = builder.path(request.getRequestURI()+"/"+cli.getId()).build();
+        return ResponseEntity.created(uriComponents.toUri()).build();
+    }
+
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remover(@PathVariable int id){
+        servico.removeById(id);
+        return ResponseEntity.noContent().build();	
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> atualizar(@PathVariable int id, @RequestBody ClienteDTO clienteDTO){
+    
+        Cliente cliente = servico.fromDTO(clienteDTO);
+        cliente.setId(id);
+        cliente = servico.update(cliente);
+        return ResponseEntity.ok(cliente);
+        
+    }
+    
+    
+
+
 }
+
+
+
+
+
+
+
+
