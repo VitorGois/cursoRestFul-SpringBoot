@@ -22,8 +22,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-  
-
     @Autowired
     private ClienteService servico;
 
@@ -48,7 +46,6 @@ public class ClienteController {
         UriComponents uriComponents = builder.path(request.getRequestURI()+"/"+cli.getId()).build();
         return ResponseEntity.created(uriComponents.toUri()).build();
     }
-
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable int id){
@@ -63,18 +60,6 @@ public class ClienteController {
         cliente.setId(id);
         cliente = servico.update(cliente);
         return ResponseEntity.ok(cliente);
-        
-    }
-    
-    
-
+    } 
 
 }
-
-
-
-
-
-
-
-
