@@ -1,8 +1,7 @@
 package com.example.cursorestfulspringboot.model;
 
-
 public class ItemPedido {
-
+    
     private int numero;
     private double precoUnitario;
     private String produto;
@@ -54,10 +53,6 @@ public class ItemPedido {
 
     public double getTotalItem(){
         return precoUnitario * quantidade;
-
     }
-
-
-    
-    
+   
 }

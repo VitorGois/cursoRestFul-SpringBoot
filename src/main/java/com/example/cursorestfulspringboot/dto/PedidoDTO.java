@@ -1,27 +1,18 @@
-package com.example.cursorestfulspringboot.model;
+package com.example.cursorestfulspringboot.dto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
+import com.example.cursorestfulspringboot.model.ItemPedido;
 
-
-public class Pedido {
+public class PedidoDTO {
     
     private long numero;
     private String descricao;
     private LocalDateTime dataPedido;
-    private Cliente cliente;
     private boolean pedidoFechado;
     private ArrayList<ItemPedido> itens = new ArrayList<ItemPedido>();
-
-    public Pedido() {
-
-    }
-
-    public Pedido(long numero) {
-        this.numero = numero;
-    }
+    private double totalPedido;
 
     public long getNumero() {
         return numero;
@@ -47,14 +38,6 @@ public class Pedido {
         this.dataPedido = dataPedido;
     }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
     public boolean isPedidoFechado() {
         return pedidoFechado;
     }
@@ -63,7 +46,7 @@ public class Pedido {
         this.pedidoFechado = pedidoFechado;
     }
 
-       public ArrayList<ItemPedido> getItens() {
+    public ArrayList<ItemPedido> getItens() {
         return itens;
     }
 
@@ -71,24 +54,11 @@ public class Pedido {
         this.itens = itens;
     }
 
-    public boolean addItemPedido(int numero, double preco, String produto, int quantidade) {
-        return itens.add(new ItemPedido(numero, preco, produto, quantidade));
+    public double getTotalPedido() {
+        return totalPedido;
     }
 
-    @JsonGetter
-    public double totalPedido() {
-        double total = 0;
-
-        for (ItemPedido item : itens) {
-            total += item.getTotalItem();
-        }
-        return total;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Pedido [cliente=" + cliente.getId() + ", dataPedido=" + dataPedido + ", descricao=" + descricao
-                + ", numero=" + numero + "]";
+    public void setTotalPedido(double totalPedido) {
+        this.totalPedido = totalPedido;
     }
 }

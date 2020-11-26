@@ -52,7 +52,6 @@ public class ClienteRepository {
                 return Optional.of(aux);
             }
         }
-
         return Optional.empty();
     }
 
@@ -69,13 +68,17 @@ public class ClienteRepository {
 	public Cliente update(Cliente cliente) {
         
         Cliente aux = getClienteById(cliente.getId()).get();
+        
         if(aux != null){
             aux.setEndereco(cliente.getEndereco());
             aux.setNome(cliente.getNome());
         }
+
         return aux;
-        
+
 	}
+
+	
 
 }
 

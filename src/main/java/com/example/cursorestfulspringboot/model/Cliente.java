@@ -10,9 +10,9 @@ public class Cliente {
     private String endereco;
     private double saldo;
 
-    @JsonIgnore
+    @JsonIgnore        
     private ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
-
+    
     public int getId() {
         return id;
     }
@@ -82,13 +82,7 @@ public class Cliente {
 
         return soma;
     }
-
-    @Override
-    public String toString() {
-        return "Cliente [endereco=" + endereco + ", id=" + id + ", nome=" + nome + ", saldo=" + saldo + "]";
-    }
-
-   
+    
 }
 
 
